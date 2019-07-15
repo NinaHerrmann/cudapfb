@@ -1,0 +1,202 @@
+﻿  pch.cu
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\for_each.h(66,1): error C2027:  use of undefined type 'thrust::detail::STATIC_ASSERTION_FAILURE<false>'
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\for_each.h(66): message :  see declaration of 'thrust::detail::STATIC_ASSERTION_FAILURE<false>'
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :  see reference to function template instantiation 'InputIterator thrust::system::detail::generic::for_each_n<thrust::cuda_cub::tag,InputIterator,Size,UnaryFunction>(thrust::execution_policy<thrust::cuda_cub::tag> &,InputIterator,Size,UnaryFunction)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :             InputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :             UnaryFunction=thrust::detail::device_generate_functor<thrust::detail::fill_functor<float>>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\for_each.inl(71): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :  see reference to function template instantiation 'InputIterator thrust::for_each_n<DerivedPolicy,OutputIterator,Size,thrust::detail::device_generate_functor<Generator>>(const thrust::detail::execution_policy_base<DerivedPolicy> &,InputIterator,Size,UnaryFunction)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             InputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             DerivedPolicy=thrust::cuda_cub::tag,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             OutputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             Generator=thrust::detail::fill_functor<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :             UnaryFunction=thrust::detail::device_generate_functor<thrust::detail::fill_functor<float>>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\generate.inl(92): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :  see reference to function template instantiation 'OutputIterator thrust::system::detail::generic::generate_n<thrust::cuda_cub::tag,OutputIterator,Size,Generator>(thrust::execution_policy<thrust::cuda_cub::tag> &,OutputIterator,Size,Generator)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :             OutputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :             Generator=thrust::detail::fill_functor<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\generate.inl(60): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :  see reference to function template instantiation 'OutputIterator thrust::generate_n<DerivedPolicy,OutputIterator,Size,thrust::detail::fill_functor<T>>(const thrust::detail::execution_policy_base<DerivedPolicy> &,OutputIterator,Size,Generator)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :             OutputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :             DerivedPolicy=thrust::cuda_cub::tag,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :             Generator=thrust::detail::fill_functor<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\fill.h(41): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :  see reference to function template instantiation 'OutputIterator thrust::system::detail::generic::fill_n<thrust::cuda_cub::tag,OutputIterator,Size,T>(thrust::execution_policy<thrust::cuda_cub::tag> &,OutputIterator,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :             OutputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :             T=float
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\fill.inl(54): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :  see reference to function template instantiation 'OutputIterator thrust::fill_n<DerivedPolicy,ForwardIterator,Size,T>(const thrust::detail::execution_policy_base<DerivedPolicy> &,OutputIterator,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :             OutputIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :             DerivedPolicy=thrust::cuda_cub::tag,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :             ForwardIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :             T=float
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(74): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :  see reference to function template instantiation 'ForwardIterator thrust::system::detail::generic::detail::uninitialized_fill_n<thrust::cuda_cub::tag,ForwardIterator,Size,T>(thrust::execution_policy<thrust::cuda_cub::tag> &,ForwardIterator,Size,const T &,thrust::detail::true_type)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :             ForwardIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :             T=float
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\system\detail\generic\uninitialized_fill.inl(127): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :  see reference to function template instantiation 'ForwardIterator thrust::system::detail::generic::uninitialized_fill_n<thrust::cuda_cub::tag,ForwardIterator,Size,T>(thrust::execution_policy<thrust::cuda_cub::tag> &,ForwardIterator,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :             ForwardIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :             T=float
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\uninitialized_fill.inl(54): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :  see reference to function template instantiation 'ForwardIterator thrust::uninitialized_fill_n<DerivedPolicy,Pointer,Size,T>(const thrust::detail::execution_policy_base<DerivedPolicy> &,ForwardIterator,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :             ForwardIterator=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :             DerivedPolicy=thrust::cuda_cub::tag,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :             Pointer=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :             T=float
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(96): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :  see reference to function template instantiation 'void thrust::detail::allocator_traits_detail::fill_construct_range<Alloc,Pointer,Size,T>(Allocator &,Pointer,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :             Alloc=thrust::device_allocator<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :             Pointer=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :             Size=unsigned __int64,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :             Allocator=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\allocator\fill_construct_range.inl(107): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :  see reference to function template instantiation 'void thrust::detail::fill_construct_range<thrust::device_allocator<T>,Base,unsigned __int64,float>(Alloc &,Pointer,Size,const T &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :             Base=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :             Alloc=thrust::device_allocator<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :             Pointer=thrust::device_ptr<float>,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :             Size=unsigned __int64
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(259): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :  while compiling class template member function 'void thrust::detail::contiguous_storage<T,Alloc>::uninitialized_fill_n(thrust::detail::normal_iterator<thrust::device_ptr<T>>,unsigned __int64,const float &)'
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\contiguous_storage.inl(258): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :  see reference to function template instantiation 'void thrust::detail::contiguous_storage<T,Alloc>::uninitialized_fill_n(thrust::detail::normal_iterator<thrust::device_ptr<T>>,unsigned __int64,const float &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(233): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :  while compiling class template member function 'thrust::detail::normal_iterator<thrust::device_ptr<T>> thrust::detail::vector_base<T,Alloc>::begin(void) const'
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(414): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :  see reference to function template instantiation 'thrust::detail::normal_iterator<thrust::device_ptr<T>> thrust::detail::vector_base<T,Alloc>::begin(void) const' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(101): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :  while compiling class template member function 'thrust::detail::vector_base<T,Alloc>::vector_base(const thrust::detail::vector_base<T,Alloc> &)'
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\detail\vector_base.inl(98): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :  see reference to function template instantiation 'thrust::detail::vector_base<T,Alloc>::vector_base(const thrust::detail::vector_base<T,Alloc> &)' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(130): message :         ]
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :  see reference to class template instantiation 'thrust::detail::vector_base<T,Alloc>' being compiled
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :         with
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :         [
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :             T=float,
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :             Alloc=thrust::device_allocator<float>
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include\thrust\device_vector.h(57): message :         ]
+C:\PFB\low-level\PFB_radioastronomie\PFB_radioastronomie\CriticalPolyphaseFilterbank.h(33): message :  see reference to class template instantiation 'thrust::device_vector<float,thrust::device_allocator<T>>' being compiled
+C:\PFB\low-level\PFB_radioastronomie\PFB_radioastronomie\CriticalPolyphaseFilterbank.h(33): message :         with
+C:\PFB\low-level\PFB_radioastronomie\PFB_radioastronomie\CriticalPolyphaseFilterbank.h(33): message :         [
+C:\PFB\low-level\PFB_radioastronomie\PFB_radioastronomie\CriticalPolyphaseFilterbank.h(33): message :             T=float
+C:\PFB\low-level\PFB_radioastronomie\PFB_radioastronomie\CriticalPolyphaseFilterbank.h(33): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :  see reference to function template instantiation 'void std::_Uninitialized_backout_al<_NoThrowFwdIt,_Alloc>::_Emplace_back<const unsigned int&>(const unsigned int &)' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :             _NoThrowFwdIt=unsigned int *,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :             _Alloc=std::allocator<std::_Vbase>
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :  see reference to function template instantiation 'void std::_Uninitialized_backout_al<_NoThrowFwdIt,_Alloc>::_Emplace_back<const unsigned int&>(const unsigned int &)' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :             _NoThrowFwdIt=unsigned int *,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :             _Alloc=std::allocator<std::_Vbase>
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(282): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :  see reference to function template instantiation '_NoThrowFwdIt std::_Uninit_alloc_fill_n1<_NoThrowFwdIt,_Diff,_Alloc>(const _NoThrowFwdIt,_Diff,const unsigned int &,_Alloc &,std::false_type)' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :             _NoThrowFwdIt=unsigned int *,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :             _Diff=unsigned __int64,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :             _Alloc=std::allocator<std::_Vbase>
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xmemory(301): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :  see reference to function template instantiation '_NoThrowFwdIt *std::_Uninitialized_fill_n<unsigned int*,unsigned __int64,std::allocator<std::_Vbase>>(const _NoThrowFwdIt,const _Diff,const unsigned int &,_Alloc &)' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :             _NoThrowFwdIt=unsigned int *,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :             _Diff=unsigned __int64,
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :             _Alloc=std::allocator<std::_Vbase>
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1548): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1546): message :  while compiling class template member function 'unsigned int *std::vector<std::_Vbase,std::allocator<std::_Vbase>>::_Ufill(unsigned int *,const unsigned __int64,const _Ty &)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1546): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1546): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1546): message :             _Ty=std::_Vbase
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1546): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1187): message :  see reference to function template instantiation 'unsigned int *std::vector<std::_Vbase,std::allocator<std::_Vbase>>::_Ufill(unsigned int *,const unsigned __int64,const _Ty &)' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1187): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1187): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1187): message :             _Ty=std::_Vbase
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(1187): message :         ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2206): message :  see reference to class template instantiation 'std::vector<std::_Vbase,std::allocator<std::_Vbase>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2212): message :  see reference to class template instantiation 'std::_Vb_val<_Alloc>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2212): message :         with
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2212): message :         [
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2212): message :             _Alloc=std::allocator<ParamType>
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\vector(2212): message :         ]
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :  see reference to class template instantiation 'std::vector<T,std::allocator<_Ty>>' being compiled
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :         with
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :         [
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :             T=ParamType,
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :             _Ty=ParamType
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util.h(365): message :         ]
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(308): message :  see reference to class template instantiation 'testing::internal::ValuesInIteratorRangeGenerator<ParamType>' being compiled
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :  see reference to function template instantiation 'testing::internal::ParamGenerator<bool> testing::ValuesIn<const T*>(ForwardIterator,ForwardIterator)' being compiled
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :         with
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :         [
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :             T=bool,
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :             ForwardIterator=const bool *
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(313): message :         ]
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util-generated.h(100): message :  see reference to function template instantiation 'testing::internal::ParamGenerator<bool> testing::ValuesIn<T,2>(const T (&)[2])' being compiled
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util-generated.h(100): message :         with
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util-generated.h(100): message :         [
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util-generated.h(100): message :             T=bool
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\internal\gtest-param-util-generated.h(100): message :         ]
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(1215): message :  see reference to function template instantiation 'testing::internal::ValueArray2<bool,bool>::operator testing::internal::ParamGenerator<bool>(void) const<bool>' being compiled
+C:\PFB\low-level\PFB_radioastronomie\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1\build\native\include\gtest\gtest-param-test.h(1215): message :  see reference to function template instantiation 'testing::internal::ValueArray2<bool,bool>::operator testing::internal::ParamGenerator<bool>(void) const<bool>' being compiled

@@ -1,0 +1,5 @@
+﻿  pch.cpp
+  test.cpp
+C:\PFB\low-level\PFB_radioastronomie\PFB-Test\pch.cpp(6,10): error C1083:  Datei (Vorkompilierte Headerdatei) kann nicht geöffnet werden: "x64\Debug\PFB-Test.pch": No such file or directory
+  Code wird generiert...
+C:\PFB\low-level\PFB_radioastronomie\PFB-Test\test.cpp(1,10): error C1083:  Datei (Vorkompilierte Headerdatei) kann nicht geöffnet werden: "x64\Debug\PFB-Test.pch": No such file or directory

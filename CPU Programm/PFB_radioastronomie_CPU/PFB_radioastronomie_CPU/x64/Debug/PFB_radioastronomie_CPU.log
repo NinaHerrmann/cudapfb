@@ -1,0 +1,40 @@
+﻿  
+  C:\PFB\CPU Programm\PFB_radioastronomie_CPU\PFB_radioastronomie_CPU>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64" -x cu  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od  /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "C:\PFB\CPU Programm\PFB_radioastronomie_CPU\PFB_radioastronomie_CPU\kernel.cu" -clean 
+  kernel.cu
+  Compiling CUDA source file kernel.cu...
+  
+  C:\PFB\CPU Programm\PFB_radioastronomie_CPU\PFB_radioastronomie_CPU>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64" -x cu  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc141.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "C:\PFB\CPU Programm\PFB_radioastronomie_CPU\PFB_radioastronomie_CPU\kernel.cu" 
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(84): warning : variable "cumulative_error" was declared but never referenced
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(84): warning : variable "mean_error" was declared but never referenced
+  kernel.cu
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(26): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(26): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(30): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(30): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(34): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(34): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(39): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(39): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(43): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(43): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(47): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(47): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(52): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(52): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(56): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(56): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(60): warning C4474: 'printf' : too many arguments passed for format string
+  C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(60): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(92): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(93): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(94): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(104): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(109): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(84): warning C4101: 'cumulative_error': unreferenced local variable
+C:/PFB/CPU Programm/PFB_radioastronomie_CPU/PFB_radioastronomie_CPU/kernel.cu(84): warning C4101: 'mean_error': unreferenced local variable
+  CriticalPolyphaseFilterbank.cpp
+c:\pfb\cpu programm\pfb_radioastronomie_cpu\pfb_radioastronomie_cpu\criticalpolyphasefilterbank.cpp(51): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\pfb\cpu programm\pfb_radioastronomie_cpu\pfb_radioastronomie_cpu\criticalpolyphasefilterbank.cpp(52): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\pfb\cpu programm\pfb_radioastronomie_cpu\pfb_radioastronomie_cpu\criticalpolyphasefilterbank.cpp(75): warning C4700: uninitialized local variable 'out' used
+     Creating library C:\PFB\CPU Programm\PFB_radioastronomie_CPU\x64\Debug\PFB_radioastronomie_CPU.lib and object C:\PFB\CPU Programm\PFB_radioastronomie_CPU\x64\Debug\PFB_radioastronomie_CPU.exp
+  PFB_radioastronomie_CPU.vcxproj -> C:\PFB\CPU Programm\PFB_radioastronomie_CPU\x64\Debug\PFB_radioastronomie_CPU.exe
