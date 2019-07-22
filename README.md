@@ -6,6 +6,8 @@ The GPU implementation is separated into two main parts:  **low-level implementa
 Complementary a CPU program is part of the repository.
 
 ## Low-level Implementations
+The implementation idea is taken from [1](https://zenodo.org/record/2587752#.XTVmc3vgpaQ) and the following conferences/proceedings: [2](https://ui.adsabs.harvard.edu/#abs/arXiv:1804.05335),[3](https://arxiv.org/abs/1812.02647),[4](https://arxiv.org/abs/1711.10855),[5](https://arxiv.org/abs/1611.09704),[6](https://arxiv.org/abs/1511.07343)
+
 However, for using the programm inside a real system you just need the `CriticalPolyphaseFilterbank.cu/h` files inside [this folder](https://portal.intern.viadee.de/gitlab/viadee/mpifr-kooperation/tree/MPIfR/production/low-level/PFB_radioastronomie/PFB_radioastronomie).
 
 This part of the project includes programs written in the CUDA API. The considered architectures are:
