@@ -40,7 +40,7 @@ __device__ __forceinline__ T ldg(const T* ptr) {
 
 /* The GPU method performs a FIR Filter. 
 It is taken from https://github.com/AstroAccelerateOrg/astro-accelerate/blob/master/lib/AstroAccelerate/PPF/GPU/SM/32bit/SM-32bit/SM-maxwell-32bit.cu 
-Which is part of the publication https://dl.acm.org/citation.cfm?id=2286986
+Which is part of the publication https://www.sciencedirect.com/science/article/pii/S221313371630018X
 It was adjusted to process floats and not float2 and some of the index calculations were outsourced.
 ldg is still the same function as __ldg however since __ldg will not work with old compute capabilities there is a check.
 */
@@ -170,6 +170,7 @@ CriticalPolyphaseFilterbank::CriticalPolyphaseFilterbank(std::size_t nchans, std
 	cufftResult error;
 	int nchans2 = (int)nChans;
 	if (TIMER) timer.Start();
+	// (cufftHandle		*plan,	rank, int *n,  *inembed, istride,idist, *onembed, ostride,odist, cufftType type, int batch);
 	error = cufftPlanMany(&plan, 1, &nchans2, &nchans2, 1, nChans, &nchans2, 1, nChans, CUFFT_R2C, NSPECTRA);
 	cufftSetStream(plan, stream);
 	if (TIMER) timer.Stop(); cufft_plan += timer.Elapsed();
