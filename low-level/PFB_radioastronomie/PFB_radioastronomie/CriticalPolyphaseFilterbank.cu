@@ -89,7 +89,9 @@ __global__ void CPF_Fir_shared_32bit(float const* __restrict__ d_data, float* d_
 				ftemp += s_coeff[j*THXPERWARP + localId] * (s_data[s_mempos + j * THXPERWARP]);
 			}
 			// TODO: Check NVVP Bank conflicts in SM.
-			d_spectra[start_column * nChannels + constantnumber] = ftemp;
+			if (start_column * nChannels + constantnumber < CHANNELS * NSPECTRA) {
+				d_spectra[start_column * nChannels + constantnumber] = ftemp;
+			}
 		}
 	}
 }
@@ -115,7 +117,7 @@ void CriticalPolyphaseFilterbank::Polyphase_Filterbank(thrust::device_vector<flo
 	dim3 blockSize(THREADS_PER_BLOCK, 1, 1); 		//nCUDAblocks_x goes through channels
 
 	//---------> FIR filter part
-	thrust::device_vector<float> fir_output((NSPECTRA + nTaps - 1) * nChans, (float)0.0);
+	thrust::device_vector<float> fir_output(NSPECTRA * nChans, (float)0.0);
 	float* inputptr = thrust::raw_pointer_cast(&d_input[0]);
 	float* outputptr = thrust::raw_pointer_cast(&fir_output[0]);
 	float* coeffptr = thrust::raw_pointer_cast(&FilterCoefficients[0]);
