@@ -173,7 +173,7 @@ CriticalPolyphaseFilterbank::CriticalPolyphaseFilterbank(std::size_t nchans, std
 	int nchans2 = (int)nChans;
 	if (TIMER) timer.Start();
 	// (cufftHandle		*plan,	rank, int *n,  *inembed, istride,idist, *onembed, ostride,odist, cufftType type, int batch);
-	error = cufftPlanMany(&plan, 1, &nchans2, &nchans2, 1, nChans, &nchans2, 1, nChans, CUFFT_R2C, NSPECTRA);
+	error = cufftPlan1d(&plan, nchans, CUFFT_R2C, NSPECTRA);
 	cufftSetStream(plan, stream);
 	if (TIMER) timer.Stop(); cufft_plan += timer.Elapsed();
 	

@@ -213,10 +213,9 @@ int main(int argc, char *argv[]) {
 	// ! Change size n nRepeats -- How to do partial Memcpy.
 	thrust::device_vector<float> d_input((nspectra + ntaps - 1)*nchans, (float)0.0);
 	thrust::device_vector<float> d_coeff(coeff_size, (float)0.0);
-	thrust::device_vector<cufftComplex> d_output(c_output_size, (cufftComplex) make_cuComplex(0.0f, 0.0f));
-	thrust::host_vector<cufftComplex> h_output(c_output_size, (cufftComplex) make_cuComplex(0.0f, 0.0f));
-	cufftComplex* d_output2;
-	checkCudaErrors(cudaMalloc((void**)& d_output2, sizeof(cufftComplex)* c_output_size));
+	thrust::device_vector<cufftComplex> d_output((((NSPECTRA* CHANNELS) / 2) + NSPECTRA), (cufftComplex) make_cuComplex(0.0f, 0.0f));
+	thrust::host_vector<cufftComplex> h_output((((NSPECTRA* CHANNELS) / 2) + NSPECTRA), (cufftComplex) make_cuComplex(0.0f, 0.0f));
+
 
 	timer.Stop();
 	device_allocation += timer.Elapsed();
