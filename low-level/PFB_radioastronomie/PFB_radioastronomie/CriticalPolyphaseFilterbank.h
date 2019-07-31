@@ -34,7 +34,6 @@ private:
 	std::size_t nTaps;
 	std::size_t nChans;
 	std::size_t nSpectra;
-	std::size_t maxColumn;
 	cudaStream_t stream;
 	cufftHandle plan;
 public:

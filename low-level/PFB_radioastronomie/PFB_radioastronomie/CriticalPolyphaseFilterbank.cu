@@ -95,7 +95,58 @@ __global__ void CPF_Fir_shared_32bit(float const* __restrict__ d_data, float* d_
 		}
 	}
 }
+__global__ void CPF_Fir_shared_32bit_Offset(float const* __restrict__ d_data, float* d_spectra, float const* __restrict__ d_coeff, int nChannels) {
 
+	float ftemp;
+	int memblock, localId, s_mempos, g_mempos, num_spectra, start_column, warpId, itemp;
+	int tx = threadIdx.x;
+	__shared__ float s_data[DATA_SIZE * 2];
+	__shared__ float s_coeff[COEFF_SIZE];
+
+	warpId = ((int)tx / THXPERWARP);
+	memblock = warpId * SUBBLOCK_SIZE;
+	localId = tx - ((int)tx / THXPERWARP) * THXPERWARP;		// Calculates threads Id within a WARP
+	num_spectra = (DATA_SIZE / THXPERWARP - TAPS + 1);
+	// read input data from global memory a store them into shared memory
+	if (tx == 0) { printf("\nblockIdx.x %d, THXPERWARP %d, (blockIdx.y + 65535) %d, num_spectra %d, nChannels %d, localId %d\n", blockIdx.x, THXPERWARP, (blockIdx.y + 65535), num_spectra, nChannels, localId); }
+	int constantnumber = blockIdx.x * THXPERWARP + (blockIdx.y + 65535) * num_spectra * nChannels + localId;
+	if (tx == 0) { printf("%d\n", constantnumber); }
+	for (int i = 0; i < SUBBLOCK_SIZE; i++) {
+		start_column = memblock + i;
+		if (start_column < DATA_SIZE / THXPERWARP) {
+			s_mempos = start_column * THXPERWARP + localId;
+			g_mempos = start_column * nChannels + constantnumber;
+			
+			// TODO: we need ldg? NVProf NVVP
+			//s_data[s_mempos] = ldg(&d_data[g_mempos]);
+		}
+	}
+	itemp = (int)(TAPS / (THREADS_PER_BLOCK / THXPERWARP)) + 1;
+	for (int f = 0; f < itemp; f++) {
+		start_column = warpId + f * (THREADS_PER_BLOCK / THXPERWARP);
+		if (start_column < TAPS) {
+			//s_coeff[start_column * THXPERWARP + localId] = ldg(&d_coeff[start_column * nChannels + blockIdx.x * THXPERWARP + localId]);
+		}
+	}
+
+	__syncthreads();
+
+	// Calculation of the FIR part
+	for (int i = 0; i < SUBBLOCK_SIZE; i++) { // WARP loops through columns in it's sub-block
+		start_column = memblock + i;
+		if (start_column < num_spectra) {
+			s_mempos = start_column * THXPERWARP + localId;
+			ftemp = 0.0f;
+			for (int j = 0; j < TAPS; j++) {
+				ftemp += s_coeff[j * THXPERWARP + localId] * (s_data[s_mempos + j * THXPERWARP]);
+			}
+			// TODO: Check NVVP Bank conflicts in SM.
+			if (start_column * nChannels + constantnumber < CHANNELS * NSPECTRA) {
+				d_spectra[start_column * nChannels + constantnumber] = ftemp;
+			}
+		}
+	}
+}
 /*
 * Executes all calculations for the Polyphase Filterbank. 
 * First, the FIR-Filter is applied to the input_data (one Kernel call of CPF_Fir_shared_32bit).
@@ -106,33 +157,57 @@ void CriticalPolyphaseFilterbank::Polyphase_Filterbank(thrust::device_vector<flo
 	cudaDeviceSetSharedMemConfig(cudaSharedMemBankSizeFourByte);
 
 	GpuTimer timer;
-	double fir_time = 0.0, fft_time = 0.0, fir_init = 0.0, cufft_ini = 0.0, cufft_plan = 0.0;
+	double fir_time = 0.0, fft_time = 0.0, cufft_ini = 0.0;
 	//---------> CUDA block and CUDA grid parameters
-	if (TIMER) timer.Start();
 	int nCUDAblocks_y = (int) ceil((float)nSpectra / SM_Columns);
 	int nCUDAblocks_x = (int)(nChans / THXPERWARP); 
-	if (DEBUG) printf("Starting (%d,%d,%d) Blocks and (%d,%d,%d) Threads with SM_Columns %d... \n\n", nCUDAblocks_x, nCUDAblocks_y, 1, THREADS_PER_BLOCK, 1, 1, SM_Columns);
-
-	dim3 gridSize(nCUDAblocks_x, nCUDAblocks_y, 1);	//nCUDAblocks_y goes through spectra
-	dim3 blockSize(THREADS_PER_BLOCK, 1, 1); 		//nCUDAblocks_x goes through channels
+	printf("(%d;%d;%d), (%d;%d;%d), %d,", nCUDAblocks_x, nCUDAblocks_y, 1, THREADS_PER_BLOCK, 1, 1, SM_Columns);
 
 	//---------> FIR filter part
 	thrust::device_vector<float> fir_output(NSPECTRA * nChans, (float)0.0);
 	float* inputptr = thrust::raw_pointer_cast(&d_input[0]);
 	float* outputptr = thrust::raw_pointer_cast(&fir_output[0]);
 	float* coeffptr = thrust::raw_pointer_cast(&FilterCoefficients[0]);
-	if (TIMER) timer.Stop(); fir_init += timer.Elapsed();
 	/* You might be confused about the kernel call, because it uses 0 bytes shared Memory. 
 	* But actually it uses 0 bytes dynamically allocated shared memory, the SM is statically allocated in the kernel. 
 	* We list it to set the stream.*/
 	if (TIMER) timer.Start();
-	CPF_Fir_shared_32bit << <gridSize, blockSize, 0, stream >>> (inputptr, outputptr, coeffptr, nChans);
-
+	int leftblocks = 0;
+	if (nCUDAblocks_y > 65535) {
+		leftblocks = nCUDAblocks_y - 65535;
+		nCUDAblocks_y = 65535;
+	}
+	dim3 gridSize(nCUDAblocks_x, nCUDAblocks_y, 1);	//nCUDAblocks_y goes through spectra
+	dim3 blockSize(THREADS_PER_BLOCK, 1, 1); 		//nCUDAblocks_x goes through channels
+	CPF_Fir_shared_32bit << <gridSize, blockSize, 0, stream >> > (inputptr, outputptr, coeffptr, nChans);
+	if (true) {
+		dim3 gridSize2(nCUDAblocks_x, 36766, 1);
+		dim3 blockSize2(THREADS_PER_BLOCK, 1, 1);
+		CPF_Fir_shared_32bit_Offset << <gridSize2, blockSize, 0, stream >> > (inputptr, outputptr, coeffptr, nChans);
+	}
 	if (TIMER) {
 		timer.Stop();
 		fir_time += timer.Elapsed();
 		timer.Start();
 	}
+	if (WRITE) {
+		thrust::host_vector<float> h_fir_output((NSPECTRA) * nChans, (float)0.0);
+		h_fir_output = fir_output;
+		const char* name = "C:\\PFB_tobias\\fir_out";
+		FILE* f = fopen(name, "w+");
+		if (f == NULL) {
+			int errnum = errno;
+			fprintf(stderr, "Error opening file!\nValue of errno: %d\n", errno);
+			exit(1);
+		}
+		
+		for (int n = 0; n < ((NSPECTRA) * nChans); n++) {
+			
+			fprintf(f, "%f\n", h_fir_output[n]);
+		}
+		fclose(f);
+	}
+	
 	outputptr = thrust::raw_pointer_cast(&fir_output[0]);
 	if (TIMER) {
 		timer.Stop();
@@ -140,12 +215,54 @@ void CriticalPolyphaseFilterbank::Polyphase_Filterbank(thrust::device_vector<flo
 		timer.Start();
 	}
 	cufftComplex* ptr_d_output = thrust::raw_pointer_cast(&d_output[0]);
-	cufftExecR2C(plan, (cufftReal *)outputptr, (cufftComplex *)ptr_d_output);
 
+	cufftExecR2C(plan, (cufftReal *)outputptr, (cufftComplex *)ptr_d_output);
+	
+	if (WRITE) {
+		thrust::host_vector<cufftComplex> h_fft_output((((NSPECTRA * CHANNELS) / 2) + NSPECTRA), (cufftComplex)make_cuComplex(0.0f, 0.0f));
+		h_fft_output = d_output;
+		const char* name = "C:\\PFB_tobias\\fft_out";
+		FILE* f = fopen(name, "w+");
+		if (f == NULL) {
+			int errnum = errno;
+			fprintf(stderr, "Error opening file!\nValue of errno: %d\n", errno);
+			exit(1);
+		}
+
+		for (int n = 0; n < (((NSPECTRA * CHANNELS) / 2) + NSPECTRA); n++) {
+			fprintf(f, "(%f, %f)\n", h_fft_output[n].x, h_fft_output[n].x);
+		}
+		fclose(f);
+		name = "C:\\PFB_tobias\\input";
+		f = fopen(name, "w+");
+		if (f == NULL) {
+			int errnum = errno;
+			fprintf(stderr, "Error opening file!\nValue of errno: %d\n", errno);
+			exit(1);
+		}
+		printf("\n\n%d", ((NSPECTRA)* nChans) + ((nTaps - 1) * NSPECTRA));
+		for (int n = 0; n < (1048768); n++) {
+			fprintf(f, "%d\n", 1);
+		}
+		fclose(f);
+		name = "C:\\PFB_tobias\\coeff";
+		f = fopen(name, "w+");
+		if (f == NULL) {
+			int errnum = errno;
+			fprintf(stderr, "Error opening file!\nValue of errno: %d\n", errno);
+			exit(1);
+		}
+
+		for (int n = 0; n < (nTaps * nChans); n++) {
+
+			fprintf(f, "%d\n", 1);
+		}
+		fclose(f);
+	}
 	if (TIMER) {
 		timer.Stop();
 		fft_time += timer.Elapsed();
-		printf("\n%f; %f; %f; %f", fir_time, fft_time, fir_init, cufft_ini);
+		printf(" %f, %f, %f,", fir_time, fft_time, cufft_ini);
 	}
 }
 
@@ -217,6 +334,6 @@ void CriticalPolyphaseFilterbank::process(thrust::device_vector<float> & input, 
 	if (TIMER) {
 		timer.Stop();
 		polyphasefilterbanktime += timer.Elapsed();
-		printf(";%f", polyphasefilterbanktime);
+		printf(" %f,", polyphasefilterbanktime);
 	}
 }

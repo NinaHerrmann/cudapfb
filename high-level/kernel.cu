@@ -1,5 +1,6 @@
 
 #include "cuda_runtime.h"
+#include "timer.cuh"
 #include "device_launch_parameters.h"
 #include <stdio.h>
 #include <array>
@@ -28,14 +29,10 @@ std::vector<float> h_input(16384); //Size:16384, localSize: 16384, gpuSize: 1638
 std::vector<float> h_input_glbcopy(16384);
 float* d_input0_loccopy;
 float* d_input0_glbcopy;
-//Declare everything for overflow
-std::vector<float> h_overflow(512); //Size:512, localSize: 512, gpuSize: 512
-std::vector<float> h_overflow_glbcopy(512);
-float* d_overflow0_loccopy;
-float* d_overflow0_glbcopy;
+
 //Declare everything for coeff
-std::vector<float> h_coeff(512); //Size:480, localSize: 480, gpuSize: 480
-std::vector<float> h_coeff_glbcopy(512);
+std::vector<float> h_coeff(1024); //Size:480, localSize: 480, gpuSize: 480
+std::vector<float> h_coeff_glbcopy(1024);
 float* d_coeff0_loccopy;
 float* d_coeff0_glbcopy;
 
