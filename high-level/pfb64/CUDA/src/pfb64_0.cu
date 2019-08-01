@@ -150,7 +150,10 @@ int main(int argc, char** argv) {
 	output = (input);
 	mkt::sync_streams();
 	std::chrono::high_resolution_clock::time_point timer_start = std::chrono::high_resolution_clock::now();
-// TODO Pass arguments! 
+// TODO Pass arguments! + threads are listed in functor? check that.
+//const int gpu_elements = a.get_size_gpu();
+		//		int threads = gpu_elements < 1024 ? gpu_elements : 1024; // nextPow2
+		//		int blocks = (gpu_elements + threads - 1) / threads;
 	mkt::map_in_place<float, FIR_map_in_place_array_functor>(input, fIR_map_in_place_array_functor);
 	int log2p = 6;
 	int log2size = 28;
