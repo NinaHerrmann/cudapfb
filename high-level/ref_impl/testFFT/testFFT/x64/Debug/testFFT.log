@@ -1,0 +1,14 @@
+﻿  Compiling CUDA source file kernel.cu...
+  
+  C:\Users\b98\source\repos\testFFT\testFFT>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\bin\HostX86\x64" -x cu  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc142.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\kernel.cu.obj "C:\Users\b98\source\repos\testFFT\testFFT\kernel.cu" 
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(85): warning : variable "a" was declared but never referenced
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(86): warning : variable "b" was declared but never referenced
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(87): warning : variable "c" was declared but never referenced
+  kernel.cu
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(106): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(111): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'double'
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(123): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 5 has type 'double'
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(124): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(133): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:/Users/b98/source/repos/testFFT/testFFT/kernel.cu(134): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+  testFFT.vcxproj -> C:\Users\b98\source\repos\testFFT\x64\Debug\testFFT.exe
