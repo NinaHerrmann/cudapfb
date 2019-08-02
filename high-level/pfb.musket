@@ -1,0 +1,98 @@
+#config PLATFORM GPU CUDA
+#config PROCESSES 1
+#config GPUS 1
+#config MODE debug
+
+const double PI = 3.141592653589793;
+
+struct complex {
+	float x;
+	float y;
+};
+
+array<float,32768,dist> input;
+array<float,32768,dist> input_double;
+array<complex,32768,dist> output;
+array<float,1024,dist> coeff;
+
+
+float init(float x){
+	return (float) mkt::rand(0.0f,1.0f);
+}
+
+float FIR(int taps, int channels, int spectra, int Index, float a) {
+	float newa = 0;
+ 	if (Index <= (channels * spectra)) {
+ 		for (int j = 0; j < taps; j++) {
+			newa += input[Index+(j*channels)] * coeff[Index+(j*channels)];
+		}
+	}
+	return newa;
+}
+
+float selectinput(float y) {
+	return (float) 0.0f;
+}
+
+float selectcoeff(float y) {
+	return (float) 0.0f;
+}
+
+float combine(int counter, int log2size, double pi, int Problemsize, int Index, float Ai) {
+// TOBE --> (i & (1<<log2size-1-j)) ? T.get(i) + omega(j,i) * Ai : Ai + omega(j,i) * T.get(i);} 
+	float new = 0.0f;
+	// Ex Omega function
+	// (i & (1<<log2size-1-j))
+	int b = Index / (std::pow(2, log2size-1-counter));   
+	int b2 = 0;
+	for (int l=0; l<=counter; l++){
+	// b2 = (b & 1) ? 2*b2+1  :  2*b2;
+		if (b == 1) {b2 = 2*b2+1;}
+		else { b2 = 2*b2;}
+		//  b >>= 1;
+		b = b / (2);
+	}
+	// double v = 2.0 * pi/ Problemsize * (b2 << (log2size-j-1)); 
+	float temp = 2.0 * pi/ Problemsize * b2 * (std::pow(2, log2size-1-counter));
+	// complex intermediateresult;
+	// intermediateresult.x = cos(temp);
+	// intermediateresult.y = sin(temp);
+	if (Index == (std::pow(2, log2size-1-counter))) {
+		new = input_double[Index] + temp * Ai;
+	}
+	else {
+		new = Ai + temp * input_double[Index];
+	}
+	return new;
+}
+
+float fetch(int counter, int log2size, int i, float Ti){
+  return input[std::pow(i,std::pow(2, log2size-1-counter))];
+}
+
+main{
+	int ntaps = 16;
+	int nchans = 64;
+	int nspectra = 512;
+	input.mapInPlace(init());
+	coeff.mapInPlace(init());
+	input_double = input;
+	mkt::roi_start();
+	// TODO FIR Filter
+	input.mapIndexInPlace(FIR(ntaps, nchans, nspectra));
+	
+	int log2p = 6;
+    int log2size  = 28; 
+
+	for(int i = 0; i < log2p; i++){
+    	input_double = input;
+    	// T.permutePartition(curry(bitcomplement)(log2p-1-i));
+		input.mapIndexInPlace(combine(i, log2size, PI, 32768));
+	}
+	for (int j=log2p; j<log2size; j++){
+      input_double.mapIndexInPlace(fetch(j, log2size));
+      input.mapIndexInPlace(combine(j, log2size, PI, 32768));
+	}
+	
+    mkt::roi_end();
+}
