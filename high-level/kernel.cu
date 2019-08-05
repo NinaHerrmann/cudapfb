@@ -64,10 +64,18 @@ __global__ void FIR_MapIndexInPlaceSkeleton_array(int a, int y, int taps, int ro
 	d_output[index] = (newa);
 }
 
-
+void writefloattofilevector(std::size_t datasize, std::vector<float>& data) {
+	for (int n = 0; n < datasize; n++) {
+		if (generaterandom) data.push_back(rand() / (float)RAND_MAX);
+	}
+}
 
 //------ Main Function -----
 int main(int argc, char** argv) {
+	GpuTimer timer;
+	srand(1);
+	double init_datastructure = 0.0, fir = 0.0, fill_ds = 0.0, out_ds = 0.0;
+	timer.Start();
 	int nDevices;
 	cudaGetDeviceCount(&nDevices);
 	int numberOfThreads, numberOfBlocks, maxThreadsPerBlock;
@@ -85,32 +93,36 @@ int main(int argc, char** argv) {
 	}
 
 	int h_input_xOffset = 0;
-	int h_overflow_xOffset = 0;
 	int h_coeff_xOffset = 0;
-
+	timer.Stop();
+	init_datastructure += timer.Elapsed();
+	timer.Start();
 	// Allocate DataStructures and
-	//no values present on host to initialize devices (data will be initialised directly on devices)
-	//Allocate Structures
+	// no values present on host to initialize devices (data will be initialised directly on devices)
+	// Allocate Structures
 	tmp_size_t = 16384 * sizeof(float);
 	float* d_input0;
 	cudaSetDevice(0);
 	cudaMalloc(&d_input0, tmp_size_t);
+	writefloattofilevector(tmp_size_t, h_input);
+	cudaMemcpyAsync(d_input0, &h_input[0], fetch_size, cudaMemcpyHostToDevice, streams[0]);
+
 	//no values present on host to initialize devices (data will be initialised directly on devices)
 	//Allocate Structures
-	tmp_size_t = 512 * sizeof(float);
-	float* d_overflow0;
-	cudaSetDevice(0);
-	cudaMalloc(&d_overflow0, tmp_size_t);
-	//no values present on host to initialize devices (data will be initialised directly on devices)
-	//Allocate Structures
-	tmp_size_t = 512 * sizeof(float);
+	tmp_size_t = 1024 * sizeof(float);
 	float* d_coeff0;
 	cudaSetDevice(0);
 	cudaMalloc(&d_coeff0, tmp_size_t);
+	writefloattofilevector(tmp_size_t, h_coeff);
+	cudaMemcpyAsync(d_coeff0, &h_coeff[0], fetch_size, cudaMemcpyHostToDevice, streams[0]);
 
 	int ntaps = 16;
-	int nchans = 32;
-	int nspectra = 497;
+	int nchans = 64;
+	int nspectra = 16384;
+	timer.Stop();
+	fill_ds += timer.Elapsed();
+	timer.Start();
+
 	if (16384 <= maxThreadsPerBlock) {
 		numberOfBlocks = 1;
 		numberOfThreads = 16384;
@@ -120,125 +132,35 @@ int main(int argc, char** argv) {
 		numberOfBlocks = ceil(16384.0 / numberOfThreads);
 	}
 	printf("Working on %d blocks and %d threads!\n", numberOfBlocks, numberOfThreads);
-	//MapIndexInPlace Call
-	cudaSetDevice(0);
-	init_MapIndexInPlaceSkeleton_array << <numberOfBlocks, numberOfThreads, 0, streams[0] >> > (h_input_xOffset + 0, d_input0);
-
-	fetch_size = 16384 * sizeof(float);
-
-	cudaMemcpyAsync(&h_input[0], d_input0, fetch_size, cudaMemcpyDeviceToHost, streams[0]);
-	h_input_glbcopy = h_input;
-	std::ostringstream s4;
-	s4 << "h_input: " << std::endl << "[";
-	for (int i = 0; i < 511; i++) {
-		s4 << h_input_glbcopy[i];
-		s4 << "; ";
-	}
-	s4 << h_input_glbcopy[511] << "]" << std::endl;
-	s4 << std::endl;
-	// printf("%s", s4.str().c_str());
-
-	if (512 <= maxThreadsPerBlock) {
-		numberOfBlocks = 1;
-		numberOfThreads = 512;
-	}
-	else {
-		numberOfThreads = maxThreadsPerBlock;
-		numberOfBlocks = ceil(512.0 / numberOfThreads);
-	}
-	printf("Working on %d blocks and %d threads!\n", numberOfBlocks, numberOfThreads);
-	//MapIndexInPlace Call
-	cudaSetDevice(0);
-	init_MapIndexInPlaceSkeleton_array << <numberOfBlocks, numberOfThreads, 0, streams[0] >> > (h_overflow_xOffset + 0, d_overflow0);
-	if (512 <= maxThreadsPerBlock) {
-		numberOfBlocks = 1;
-		numberOfThreads = 512.0;
-	}
-	else {
-		numberOfThreads = maxThreadsPerBlock;
-		numberOfBlocks = ceil(512.0 / numberOfThreads);
-	}
-	printf("Working on %d blocks and %d threads!\n", numberOfBlocks, numberOfThreads);
-	//MapIndexInPlace Call
-	cudaSetDevice(0);
-	init_MapIndexInPlaceSkeleton_array << <numberOfBlocks, numberOfThreads, 0, streams[0] >> > (h_coeff_xOffset + 0, d_coeff0);
-	//Print array h_coeff
-
-	tmp_size_t = 16384 * sizeof(float);
-	float* d_output0;
-	cudaSetDevice(0);
-	cudaMalloc(&d_output0, tmp_size_t);
-	std::chrono::high_resolution_clock::time_point timer_start = std::chrono::high_resolution_clock::now();
-	if (16384 <= maxThreadsPerBlock) {
-		numberOfBlocks = 1;
-		numberOfThreads = 16384;
-	}
-	else {
-		numberOfThreads = maxThreadsPerBlock;
-		numberOfBlocks = ceil(16384.0 / numberOfThreads);
-	}
-	printf("Working on %d blocks and %d threads!\n", numberOfBlocks, numberOfThreads);
-	//Create needed global copys
-	//Make complete, global copy of input:
-	// ? fetch_size = 16384*sizeof(int);
-	// ? cudaSetDevice(0);
-	// ? cudaMalloc(&d_input0, fetch_size);
-	// ?  cudaMemcpyAsync(d_input0, &h_input[0], fetch_size, cudaMemcpyHostToDevice, streams[0]);
-
-	//Make complete, global copy of coeff:
-	// ? fetch_size = 480*sizeof(int);
-	// ? cudaSetDevice(0);
-	// ? cudaMalloc(&d_coeff0, fetch_size);
-	// ? cudaMemcpyAsync(d_coeff0, &h_coeff[0], fetch_size, cudaMemcpyHostToDevice, streams[0]);
 
 	//MapIndexInPlace Call
 	cudaSetDevice(0);
-	//																							int a, int y, int taps, int rowOffset, int* nspectra, int* p_input, int* p_coeff
+	//	int a, int y, int taps, int rowOffset, int* nspectra, int* p_input, int* p_coeff
 	FIR_MapIndexInPlaceSkeleton_array << <numberOfBlocks, numberOfThreads, 0, streams[0] >> > (h_input_xOffset + 0, 0, (ntaps), (nchans), (nspectra), d_input0, d_coeff0, d_output0);
-	std::chrono::high_resolution_clock::time_point timer_end = std::chrono::high_resolution_clock::now();
-	double seconds = std::chrono::duration<double>(timer_end - timer_start).count();
-	printf("Took %f seconds \n", seconds);
+	timer.Stop();
+	fir += timer.Elapsed();
+	timer.Start();
 	fetch_size = 16384 * sizeof(float);
 	cudaMemcpy(&h_input[0], d_output0, fetch_size, cudaMemcpyDeviceToHost);
 	//Show h_input as h_input_glbcopy
 	//hostdata is up-to-date, just make copy_variablename accessible
 	h_input_glbcopy = h_input;
-	//Print array h_input
-	std::ostringstream s0;
-	s0 << "h_output: " << std::endl << "[";
-	for (int i = 0; i < 16383; i++) {
-		s0 << h_input_glbcopy[i];
-		s0 << "; ";
-	}
-	s0 << h_input_glbcopy[16383] << "]" << std::endl;
-	s0 << std::endl;
-	printf("%s", s0.str().c_str());
 
-	//Print array h_coeff
-	fetch_size = 512 * sizeof(float);
+	fetch_size = 1024 * sizeof(float);
 
 	cudaMemcpyAsync(&h_coeff[0], d_coeff0, fetch_size, cudaMemcpyDeviceToHost, streams[0]);
 	h_coeff_glbcopy = h_coeff;
-	std::ostringstream s1;
-	s1 << "h_coeff: " << std::endl << "[";
-	for (int i = 0; i < 479; i++) {
-		s1 << h_coeff_glbcopy[i];
-		s1 << "; ";
-	}
-	s1 << h_coeff_glbcopy[479] << "]" << std::endl;
-	s1 << std::endl;
-	printf("%s", s1.str().c_str());
 
 	// Free DataStructures
 	cudaFree(d_input0);
 	cudaFree(d_input0_loccopy);
 	cudaFree(d_input0_glbcopy);
-	cudaFree(d_overflow0);
-	cudaFree(d_overflow0_loccopy);
-	cudaFree(d_overflow0_glbcopy);
 	cudaFree(d_coeff0);
 	cudaFree(d_coeff0_loccopy);
 	cudaFree(d_coeff0_glbcopy);
+	timer.Stop();
+	out_ds += timer.Elapsed();
+	printf("\n%f; %f; %f; %f", init_datastructure, fill_ds, fir, out_ds);
 
 	// MPI Finalisation
 	return EXIT_SUCCESS;

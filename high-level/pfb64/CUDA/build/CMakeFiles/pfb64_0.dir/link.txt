@@ -1,0 +1,1 @@
+/usr/lib/nvidia-cuda-toolkit/bin/g++   CMakeFiles/pfb64_0.dir/src/pfb64_0.cu.o CMakeFiles/pfb64_0.dir/cmake_device_link.o -o bin/pfb64_0  -L"/usr/lib/x86_64-linux-gnu/stubs" -lcudadevrt -lcudart_static -lrt -lpthread -ldl

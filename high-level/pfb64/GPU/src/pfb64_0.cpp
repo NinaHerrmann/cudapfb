@@ -25,10 +25,13 @@
 	std::vector<std::uniform_real_distribution<float>> rand_dist_float_0_0f_1_0f;
 	
 			
-	mkt::DArray<float> input(0, 268435952, 268435952, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
-	mkt::DArray<float> output(0, 268435952, 268435952, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
-	mkt::DArray<float> coeff(0, 1024, 1024, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+	const double PI = 3.141592653589793;
+	mkt::DArray<float> input(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+	mkt::DArray<float> input_double(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+	mkt::DArray<complex> output(0, 16, 16, complex{}, 1, 0, 0, mkt::DIST, mkt::COPY);
+	mkt::DArray<float> coeff(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
 	
+	//Complex::Complex() : x(), y() {}
 	
 
 	
@@ -43,7 +46,7 @@
 		
 		~Init_map_in_place_array_functor() {}
 		
-		auto operator()(float x){
+		auto operator()(int x){
 			size_t local_rns_index  = _gang + _worker + _vector + _rns_index; // this can probably be improved
 			local_rns_index  = (local_rns_index + 0x7ed55d16) + (local_rns_index << 12);
 			local_rns_index = (local_rns_index ^ 0xc761c23c) ^ (local_rns_index >> 19);
@@ -80,22 +83,15 @@
 		int _worker;
 		int _vector;
 	};
-	struct FIR_map_in_place_array_functor{
+	struct Zero_fill_map_in_place_array_functor{
 		
-		FIR_map_in_place_array_functor(){
+		Zero_fill_map_in_place_array_functor(){
 		}
 		
-		~FIR_map_in_place_array_functor() {}
+		~Zero_fill_map_in_place_array_functor() {}
 		
-		auto operator()(float a){
-			float newa = 0;
-			for(int j = 0; ((j) < 2); j++){
-				
-				if(((a) <= (3 * 4))){
-				newa = static_cast<float>((a));
-				}
-			}
-			return (newa);
+		auto operator()(int x){
+			return static_cast<float>(0);
 		}
 	
 		void init(int gpu){
@@ -114,18 +110,22 @@
 		int _worker;
 		int _vector;
 	};
-	struct Combine_map_index_in_place_array_functor{
+	struct Bitrev_reorder_map_index_in_place_array_functor{
 		
-		Combine_map_index_in_place_array_functor(){
+		Bitrev_reorder_map_index_in_place_array_functor(const mkt::DArray<float>& _input) : input(_input){
 		}
 		
-		~Combine_map_index_in_place_array_functor() {}
+		~Bitrev_reorder_map_index_in_place_array_functor() {}
 		
-		auto operator()(int Ai, float T){
-			return (0.0f + );
+		auto operator()(int x, int i){
+			int brev = 0;
+			int __powf = 0;
+			return // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			;
 		}
 	
 		void init(int gpu){
+			input.init(gpu);
 		}
 		
 		void set_id(int gang, int worker, int vector){
@@ -134,9 +134,97 @@
 			_vector = vector;
 		}
 		
-		int j;
-		int i;
+		int log2size;
 		
+		mkt::DeviceArray<float> input;
+		
+		
+		int _gang;
+		int _worker;
+		int _vector;
+	};
+	struct Fetch_map_index_in_place_array_functor{
+		
+		Fetch_map_index_in_place_array_functor(const mkt::DArray<float>& _input) : input(_input){
+		}
+		
+		~Fetch_map_index_in_place_array_functor() {}
+		
+		auto operator()(int i, float Ti){
+			return // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			;
+		}
+	
+		void init(int gpu){
+			input.init(gpu);
+		}
+		
+		void set_id(int gang, int worker, int vector){
+			_gang = gang;
+			_worker = worker;
+			_vector = vector;
+		}
+		
+		int counter;
+		int log2size;
+		
+		mkt::DeviceArray<float> input;
+		
+		
+		int _gang;
+		int _worker;
+		int _vector;
+	};
+	struct Combine_map_index_in_place_array_functor{
+		
+		Combine_map_index_in_place_array_functor(const mkt::DArray<float>& _input_double) : input_double(_input_double){
+		}
+		
+		~Combine_map_index_in_place_array_functor() {}
+		
+		auto operator()(int Index, float Ai){
+			float newa = 0.0f;
+			int b = ((Index) / std::pow(2, (((log2size) - 1) - (counter))));
+			int b2 = 0;
+			for(int l = 0; ((l) <= (counter)); l++){
+				
+				if(((b) == 1)){
+				b2 = ((2 * (b2)) + 1);
+				}
+				 else {
+						b2 = (2 * (b2));
+					}
+				b = ((b) / 2);
+			}
+			float temp = ((((2.0 * (pi)) / (Problemsize)) * (b2)) * std::pow(2, (((log2size) - 1) - (counter))));
+			
+			if(((Index) == std::pow(2, (((log2size) - 1) - (counter))))){
+			newa = (// TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			 + ((temp) * (Ai)));
+			}
+			 else {
+					newa = ((Ai) + ((temp) * // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+					));
+				}
+			return (newa);
+		}
+	
+		void init(int gpu){
+			input_double.init(gpu);
+		}
+		
+		void set_id(int gang, int worker, int vector){
+			_gang = gang;
+			_worker = worker;
+			_vector = vector;
+		}
+		
+		int counter;
+		int log2size;
+		double pi;
+		int Problemsize;
+		
+		mkt::DeviceArray<float> input_double;
 		
 		
 		int _gang;
@@ -169,8 +257,10 @@
 		}
 		
 		Init_map_in_place_array_functor init_map_in_place_array_functor{rns_pointers};
-		FIR_map_in_place_array_functor fIR_map_in_place_array_functor{};
-		Combine_map_index_in_place_array_functor combine_map_index_in_place_array_functor{};
+		Zero_fill_map_in_place_array_functor zero_fill_map_in_place_array_functor{};
+		Bitrev_reorder_map_index_in_place_array_functor bitrev_reorder_map_index_in_place_array_functor{input};
+		Fetch_map_index_in_place_array_functor fetch_map_index_in_place_array_functor{input};
+		Combine_map_index_in_place_array_functor combine_map_index_in_place_array_functor{input_double};
 		
 		rand_dist_float_0_0f_1_0f.reserve(0);
 		for(size_t counter = 0; counter < 0; ++counter){
@@ -180,23 +270,26 @@
 				
 		
 		int ntaps = 16;
-		int nchans = 64;
-		int nspectra = 4194304;
+		int nchans = 16;
+		int nspectra = 16;
 		mkt::map_in_place<float, Init_map_in_place_array_functor>(input, init_map_in_place_array_functor);
 		mkt::map_in_place<float, Init_map_in_place_array_functor>(coeff, init_map_in_place_array_functor);
-		output = (input);
+		mkt::map_in_place<float, Zero_fill_map_in_place_array_functor>(input_double, zero_fill_map_in_place_array_functor);
 		for(int gpu = 0; gpu < 1; ++gpu){
 			acc_set_device_num(gpu, acc_device_not_host);
 			acc_wait_all();
 		}
 		std::chrono::high_resolution_clock::time_point timer_start = std::chrono::high_resolution_clock::now();
-		mkt::map_in_place<float, FIR_map_in_place_array_functor>(input, fIR_map_in_place_array_functor);
-		int log2p = 1;
-		int log2size = 28;
-		float j = 0;
-		for(int i = 0; ((i) < (log2p)); i++){
-			combine_map_index_in_place_array_functor.j = (j);combine_map_index_in_place_array_functor.i = (output);
-			mkt::map_index_in_place<float, Combine_map_index_in_place_array_functor>(input, combine_map_index_in_place_array_functor);
+		int log2size = 4;
+		bitrev_reorder_map_index_in_place_array_functor.log2size = (log2size);
+		mkt::map_index_in_place<float, Bitrev_reorder_map_index_in_place_array_functor>(input_double, bitrev_reorder_map_index_in_place_array_functor);
+		for(int i = 0; ((i) < 1); i++){
+			for(int j = 0; ((j) < (log2size)); j++){
+				fetch_map_index_in_place_array_functor.counter = (j);fetch_map_index_in_place_array_functor.log2size = (log2size);
+				mkt::map_index_in_place<float, Fetch_map_index_in_place_array_functor>(input_double, fetch_map_index_in_place_array_functor);
+				combine_map_index_in_place_array_functor.counter = (j);combine_map_index_in_place_array_functor.log2size = (log2size);combine_map_index_in_place_array_functor.pi = (PI);combine_map_index_in_place_array_functor.Problemsize = 16;
+				mkt::map_index_in_place<float, Combine_map_index_in_place_array_functor>(input, combine_map_index_in_place_array_functor);
+			}
 		}
 		for(int gpu = 0; gpu < 1; ++gpu){
 			acc_set_device_num(gpu, acc_device_not_host);

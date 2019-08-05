@@ -1,0 +1,1 @@
+/usr/bin/nvcc   -Xcompiler  -Xlinker  -g -G -O0 -arch=compute_61 -code=sm_61 -use_fast_math -restrict -Xptxas -O0 -Xcompiler -O0,-g,-march=native,-Wall,-Wextra,-DMPICH_IGNORE_CXX_SEEK,-std=c++14  -Xcompiler=-fPIC -Wno-deprecated-gpu-targets -shared -dlink CMakeFiles/pfb64_0.dir/src/pfb64_0.cu.o -o CMakeFiles/pfb64_0.dir/cmake_device_link.o 

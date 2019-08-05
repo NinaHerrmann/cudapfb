@@ -630,6 +630,15 @@ __device__ const T& mkt::DeviceArray<T>::get_data_local(size_t local_index) cons
 }
 
 
+template<>
+void mkt::print<Complex>(std::ostringstream& stream, const Complex& a) {
+  stream << "[";
+  stream << "x: ";
+  mkt::print<float>(stream, a.x);stream << "; ";
+  stream << "y: ";
+  mkt::print<float>(stream, a.y);
+  stream << "]";
+}
 
 template<typename T>
 void mkt::print(std::ostringstream& stream, const T& a) {

@@ -1,0 +1,33 @@
+﻿  Compiling CUDA source file src\pfb64_0.cu...
+  
+  C:\Users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\CUDA>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin\nvcc.exe" -gencode=arch=compute_35,code=\"sm_35,compute_35\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX64\x64" -x cu  -I"C:\Users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\CUDA\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\include"     --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static -Xcompiler="/EHsc -Xlinker -Zi -Ob0" -g   -D_WINDOWS -D"CMAKE_INTDIR=\"Debug\"" -D"CMAKE_INTDIR=\"Debug\"" -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdpfb64_0.dir\Debug\vc141.pdb /FS /Zi /RTC1 /MDd /GR" -o pfb64_0.dir\Debug\pfb64_0.obj "C:\Users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\CUDA\src\pfb64_0.cu" 
+cl : Command line warning D9002: ignoring unknown option '-Xlinker'
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(35): warning : variable "curand_state" was declared but never referenced
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(121): warning : variable "ntaps" was declared but never referenced
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(122): warning : variable "nchans" was declared but never referenced
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(123): warning : variable "nspectra" was declared but never referenced
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(21): warning : variable "PI" was declared but never referenced
+cl : Command line warning D9002: ignoring unknown option '-Xlinker'
+  pfb64_0.cu
+cl : Command line warning D9002: ignoring unknown option '-Xlinker'
+C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(131): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\cuda\src\../include/musket.cuh(518): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(124): note: see reference to function template instantiation 'void mkt::map_in_place<float,Init_map_in_place_array_functor>(mkt::DArray<float> &,Functor)' being compiled
+          with
+          [
+              Functor=Init_map_in_place_array_functor
+          ]
+c:\users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\cuda\src\../include/musket.cuh(519): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\cuda\src\../include/musket.cuh(541): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/src/pfb64_0.cu(138): note: see reference to function template instantiation 'void mkt::map_index_in_place<float,Bitrev_reorder_map_index_in_place_array_functor>(mkt::DArray<float> &,Functor)' being compiled
+          with
+          [
+              Functor=Bitrev_reorder_map_index_in_place_array_functor
+          ]
+c:\users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\cuda\src\../include/musket.cuh(542): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+     Creating library C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/lib/Debug/pfb64_0.lib and object C:/Users/b98/git/musket-dslbenchmarktaurus/src-gen/pfb64/CUDA/lib/Debug/pfb64_0.exp
+  pfb64_0.vcxproj -> C:\Users\b98\git\musket-dslbenchmarktaurus\src-gen\pfb64\CUDA\bin\Debug\pfb64_0.exe

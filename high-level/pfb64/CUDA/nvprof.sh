@@ -3,7 +3,7 @@
 source_folder=${PWD} && \
 
 # remove files and create folder
-mkdir -p /home/fwrede/musket-build/pfb64/CUDA/out/ && \
+mkdir -p /home/nihe532b/musket-build/pfb64/CUDA/out/ && \
 rm -rf -- ~/build/mnp/pfb64/cuda && \
 mkdir -p ~/build/mnp/pfb64/cuda && \
 

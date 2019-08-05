@@ -41,7 +41,7 @@ static __device__ __host__ inline float2 CplxMul(float2 a, float2 b) {
  */
 __global__ void bitrev_reorder(float2* __restrict__ r, float2* __restrict__ d, int s, size_t nthr) {
 	int id = blockIdx.x * nthr + threadIdx.x;
-	// if (threadIdx.x == 0) printf("take id %d write to %d\n", id, __brev(id) >> (32 - s));
+	//if (threadIdx.x == 0) printf("take id %d write to %d\n", id, __brev(id) >> (32 - s));
 	r[__brev(id) >> (32 - s)] = d[id];
 }
 /**
@@ -98,7 +98,7 @@ __global__ void muesli_combine(float2* T, float2* R, int log2size, int j, int Pr
 		b2 = (b & 1) ? 2 * b2 + 1 : 2 * b2;
 		b >>= 1;
 	}
-	float2 Ai = T[i];
+	float2 Ai = R[i];
 	double v = 2.0 * M_PI / Problemsize * (b2 << (log2size - j - 1));
 	float2 returnvalue;
 	returnvalue.x = cos(v);
@@ -106,9 +106,15 @@ __global__ void muesli_combine(float2* T, float2* R, int log2size, int j, int Pr
 	//inline complex combine(const DistributedArray<complex> & T, int j, int i, complex Ai) {
 	float2 res;
 	(i & (1 << log2size - 1 - j)) ? res = complex_add(T[i], complex_mult(returnvalue, Ai)) : res = complex_add(Ai, complex_mult(returnvalue, T[i]));
-	R[i] = res;
+	//printf("\nWrite %f %f to %d",res.x, res.y, i);
+	T[i] = res;
 	//}
 }
+
+__device__ int dev_bitcomplement(int k, int i) {
+	return i ^ (1 << k);
+}
+
 __global__ void muesli_fetch(float2* T, float2* R, int log2size, int j) {
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	//fetch(const DistributedArray<complex> & R, int j, int i, complex Ti) {
@@ -121,9 +127,6 @@ __global__ void bitcomplement(float2* result, float2* temp) {
 	// TODO return i ^ (1<<k);
 }
 
-__device__ int dev_bitcomplement(int k, int i) {
-	return i ^ (1 << k);
-}
 
 int main()
 {
@@ -135,76 +138,125 @@ int main()
 	float2* r;
 	float2* dn;
 	float2* h_dn;
-	int n = 1024;
+	int n = 16;
 	size_t data_size = n * sizeof(float2);
-	h_dn = (float2*)malloc(data_size);
-	cudaMalloc((void**)& r, data_size);
-	cudaMalloc((void**)& dn, data_size);
+	
+	float2* d_Index;
+	float2* d_Index_output;
+	float2* d_Vier;
+	float2* d_Vier_output;
+	float2* h_Index;
+	float2* h_vier;
+	h_Index = (float2*)malloc(data_size);
+	h_vier = (float2*)malloc(data_size);
+
+	cudaMalloc((void**)& d_Index, sizeof(float2) * n);
+	cudaMalloc((void**)& d_Index_output, sizeof(float2) * n);
+	cudaMalloc((void**)& d_Vier, sizeof(float2) * n);
+	cudaMalloc((void**)& d_Vier_output, sizeof(float2) * n);
+	printf("\nInput:");
 	for (int i = 0; i < n; i++) {
-		h_dn[i].x = 4;
-		h_dn[i].y = 4;
-		//printf("(%f,%f)", h_dn[i].x, h_dn[i].y);
+		h_Index[i].x = i;
+		h_Index[i].y = i;
 	}
-	cudaMemcpy(dn, h_dn, data_size, cudaMemcpyHostToDevice);
-	//cudaMemcpy(dn, d, data_size, cudaMemcpyHostToDevice);
+	printf("\nVier:");
+	for (int i = 0; i < n; i++) {
+		h_vier[i].x = 4;
+		h_vier[i].y = 4;
+	}
+	cudaMemcpy(d_Index, h_Index, data_size, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_Vier, h_vier, data_size, cudaMemcpyHostToDevice);
     // Add vectors in parallel.
-	int threads = 32;
+	int threads = 16;
 	int log2size = log2(n);
 	dim3 dim_blocks(n / threads);
 	dim3 dim_threads(threads);
-	bitrev_reorder << <dim_blocks, dim_threads >> > (r, dn, log2size, threads);
-	cudaMemcpy(h_dn, r, data_size, cudaMemcpyDeviceToHost);
-	printf("%d blocks %d %d %d\n", ceil(n / threads), n, threads, n / threads);
-	for (int i = 0; i < 10; i++) {
-		printf("(%f,%f)\n", h_dn[i].x, h_dn[i].y);
+	bitrev_reorder << <dim_blocks, dim_threads >> > (d_Index_output, d_Index, log2size, threads);
+	bitrev_reorder << <dim_blocks, dim_threads >> > (d_Vier_output, d_Vier, log2size, threads);
+	cudaMemcpy(h_Index, d_Index_output, data_size, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_vier, d_Vier_output, data_size, cudaMemcpyDeviceToHost);
+	printf("\nIndex: ");
+	for (int i = 0; i < 16; i++) {
+		if (i % 4 == 0) {
+			printf("\n");
+		}
+		printf("(%f,%f)",h_Index[i].x,	h_Index[i].y);
+	}
+	printf("\nVier: ");
+
+	for (int i = 0; i < 16; i++) {
+		if (i % 4 == 0) {
+			printf("\n");
+		}
+		printf("(%f,%f)", h_vier[i].x, h_vier[i].y);	
+	}
+	for (int j = 0; j < log2size; j++) {
+		// T.mapIndexInPlace(curry(fetch)(R)(j));
+		// (float2* T, float2* R, int log2size, int j)
+		muesli_fetch << <(1), threads >> > (d_Vier, d_Vier_output, log2size, j);
+		muesli_fetch << <(1), threads >> > (d_Index, d_Index_output, log2size, j);
+		cudaMemcpy(h_vier, d_Vier, data_size, cudaMemcpyDeviceToHost);
+
+		printf("\nFetch: Iteration %d Vier : ", j);
+
+		for (int i = 0; i < 16; i++) {
+			if (i % 4 == 0) {
+				printf("\n");
+			}
+			printf("(%f,%f)", h_vier[i].x, h_vier[i].y);
+		}
+		cudaMemcpy(h_Index, d_Index, data_size, cudaMemcpyDeviceToHost);
+
+		printf("\nFetch: Iteration %d Index : ", j);
+
+		for (int i = 0; i < 16; i++) {
+			if (i % 4 == 0) {
+				printf("\n");
+			}
+			printf("(%f,%f)", h_Index[i].x, h_Index[i].y);
+		}
+		muesli_combine << <(1), threads >> > (d_Vier_output, d_Vier, log2size, j, 16);
+		muesli_combine << <(1), threads >> > (d_Index_output, d_Index, log2size, j, 16);
+		cudaMemcpy(h_vier, d_Vier_output, data_size, cudaMemcpyDeviceToHost);
+
+		printf("\nCombine: Iteration %d Vier : ", j);
+
+		for (int i = 0; i < 16; i++) {
+			if (i % 4 == 0) {
+				printf("\n");
+			}
+			printf("(%f,%f)", h_vier[i].x, h_vier[i].y);
+		}
+		cudaMemcpy(h_Index, d_Index_output, data_size, cudaMemcpyDeviceToHost);
+
+		printf("\nCombine: Iteration %d Index : ", j);
+
+		for (int i = 0; i < 16; i++) {
+			if (i % 4 == 0) {
+				printf("\n");
+			}
+			printf("(%f,%f)", h_Index[i].x, h_Index[i].y);
+		}
+		
 	}
 	float2* im_result;
 	im_result = (float2*)malloc(data_size);
 	// log2size = 9
 	cudaDeviceSynchronize();
 	// Iterative FFT (with loop paralelism balancing)
-	/*for (int i = 1; i <= log2size; i++) {
-		int m = 1 << i;
-		if (n / m > 0) {
-			printf("n / m / threads %d %d %d %d ceil:%d\n", n / m / threads, n, m, threads, ceil(n / m / threads));
-			inplace_fft_outer << <((float)n / m / threads), threads >> > (r, m, n, threads);
-			cudaMemcpy(im_result, r, data_size, cudaMemcpyDeviceToHost);
-			for (int i = 0; i < 10; i++) {
-				//printf("(%f,%f),", im_result[i].x, im_result[i].y);
-			}
-			//printf("\n");
-		}
-		else {
-			for (int j = 0; j < n; j += m) {
-				float repeats = m / 2;
-				inplace_fft << <ceil(repeats / threads), threads >> > (r, j, m, n, threads);
-				printf("balance\n");
-			}
-		}
-	}*/
-	r = dn;
+
+	//r = dn;
 	// move everything
-	bitcomplement<< <((float)n / m / threads), threads >> > (dn, r);
+	//bitcomplement<< <((float)n / m / threads), threads >> > (dn, r);
 	// T.permutePartition(curry(bitcomplement)(log2p - 1 - j));
 	// R.mapIndexInPlace(curry(combine)(T)(j)); --> calculate individuals
 	int Problemsize = data_size;
 	int j = 0;
-	muesli_combine << <((float)n / m / threads), threads >> > (dn, r, log2size, j, Problemsize);
+	//muesli_combine << <((float)n / m / threads), threads >> > (dn, r, log2size, j, Problemsize);
+
 	
-	for (int j = 0; j < log2size; j++) {
-		// T.mapIndexInPlace(curry(fetch)(R)(j));
-		// (float2* T, float2* R, int log2size, int j)
-		muesli_fetch << <((float)n / m / threads), threads >> > (dn, r, log2size, j);
-		muesli_combine << <((float)n / m / threads), threads >> > (dn, r, log2size, j, Problemsize);
-	}
-	float2* result;
-	result = (float2*)malloc(data_size);
-	cudaMemcpy(result, r, data_size, cudaMemcpyDeviceToHost);
-	for (int i = 0; i < 1024 / 2; i++) {
-		//printf("(%f,%f),", result[i].x, result[i].y);
-	}
-	cudaFree(r);
-	cudaFree(dn);
+	//cudaFree(r);
+	//cudaFree(dn);
 	// Making a cufft comparison...
 	cufftHandle plan;
 	cufftComplex* data;
@@ -218,6 +270,7 @@ int main()
 		cufft_h_dn[i].y = 4;
 		//printf("(%f,%f)", h_dn[i].x, h_dn[i].y);
 	}
+
 	cudaMemcpy(data, cufft_h_dn, data_size, cudaMemcpyHostToDevice);
 	cufftPlan1d(&plan, 32, CUFFT_C2C, 1024);
 	cudaError_t cudaStatus = cudaGetLastError();
@@ -230,7 +283,7 @@ int main()
 	cudaDeviceSynchronize();
 	cudaMemcpy(cufft_h_dn, cufft_output, data_size, cudaMemcpyDeviceToHost);
 	for (int i = 0; i < 10; i++) {
-		(cufft_h_dn[i].x == result[i].x) ? printf("same: %f==%f;\n", cufft_h_dn[i].x, result[i].x) : printf("%f!=%f; %f!=%f; \n", cufft_h_dn[i].x, result[i].x, cufft_h_dn[i].y, result[i].y);
+		//(cufft_h_dn[i].x == result[i].x) ? printf("same: %f==%f;\n", cufft_h_dn[i].x, result[i].x) : printf("%f!=%f; %f!=%f; \n", cufft_h_dn[i].x, result[i].x, cufft_h_dn[i].y, result[i].y);
 	}
 
 	cufftDestroy(plan);
@@ -333,4 +386,5 @@ Error:
     cudaFree(dev_b);
     
     return cudaStatus;
+
 }

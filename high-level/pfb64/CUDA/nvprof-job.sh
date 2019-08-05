@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node 1
 #SBATCH --partition gpu2
 #SBATCH --exclusive
-#SBATCH --output /home/fwrede/musket-build/pfb64/CUDA/out/pfb64-nvprof-nodes-1-gpu-1.out
+#SBATCH --output /home/nihe532b/musket-build/pfb64/CUDA/out/pfb64-nvprof-nodes-1-gpu-1.out
 #SBATCH --cpus-per-task 24
 #SBATCH --mail-type ALL
 #SBATCH --mail-user fabian.wrede@mailbox.tu-dresden.de

@@ -15,6 +15,13 @@
 	
 	#include "../include/musket.cuh"
 	#include "../include/pfb64_0.cuh"
+	
+	
+	
+	const double PI = 3.141592653589793;
+	
+	//Complex::Complex() : x(), y() {}
+	
 
 	
 	struct Init_map_in_place_array_functor{
@@ -24,7 +31,7 @@
 		~Init_map_in_place_array_functor() {}
 		
 		__device__
-		auto operator()(float x){
+		auto operator()(int x){
 			curandState_t curand_state; // performance could be improved by creating states before
 			size_t id = blockIdx.x * blockDim.x + threadIdx.x;
 			curand_init(clock64(), id, 0, &curand_state);
@@ -41,50 +48,15 @@
 		
 		
 	};
-	struct FIR_map_in_place_array_functor{
+	struct Zero_fill_map_in_place_array_functor{
 		
-		FIR_map_in_place_array_functor(){}
+		Zero_fill_map_in_place_array_functor(){}
 		
-		~FIR_map_in_place_array_functor() {}
+		~Zero_fill_map_in_place_array_functor() {}
 		
 		__device__
-		auto operator()(float const* __restrict__ d_data, float* d_spectra, float const* __restrict__ d_coeff){
-			int Idx = ((blockIdx.x) * blockDim.x) + threadIdx.x + (64 * blockIdx.x);
-			int tx = threadIdx.x;
-
-			__shared__ float s_data[2048];
-			__shared__ float s_coeff[1024];
-
-			s_data[tx] = ldg(&d_data[Idx]);
-			s_data[tx+1024] = ldg(&d_data[Idx+1024]);
-	
-
-			if (tx < 64 * 16) {
-				s_coeff[tx] = ldg(&d_coeff[tx]);
-			}
-
-			__syncthreads();
-			float ftemp = 0.0f;
-			if (threadIdx.x < (2048 - (15 * 64))) {
-				if (Idx < 64 * 2097152) {
-					for (int i = 0; i < 16; i++) {
-						if (i==0 && blockIdx.x == 1 && threadIdx.x < 2) printf(" coeff %f, data %d  \n", s_coeff[tx + (i * 64)], s_data[tx + (i * 64)]);
-
-						ftemp += s_coeff[tx + (i * 64)] * (s_data[tx + (i * 64)]);
-					}
-
-					d_spectra[Idx] = ftemp;
-				}
-			}
-			ftemp = 0.0f;
-			if (threadIdx.x+1024 < (2048 - (15 * 64))) {
-				if (Idx+1024 < 64 * 2097152) {
-					for (int i = 0; i < 16; i++) {
-						ftemp += s_coeff[(tx + (i * 64))+1024] * (s_data[(tx + (i * 64))+1024]);
-					}
-					d_spectra[Idx+1024] = ftemp;
-				}
-			}
+		auto operator()(int x){
+			return static_cast<float>(0);
 		}
 	
 		void init(int device){
@@ -97,18 +69,99 @@
 		
 		
 	};
+	struct Bitrev_reorder_map_index_in_place_array_functor{
+		
+		Bitrev_reorder_map_index_in_place_array_functor(const mkt::DArray<float>& _input) : input(_input){}
+		
+		~Bitrev_reorder_map_index_in_place_array_functor() {}
+		
+		__device__
+		auto operator()(int x, int i){
+			int brev = 0;
+			int __powf = 0;
+			return // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			input.get_data_local(((x) / std::pow2(2, (32 - (log2size)))))
+			;
+		}
+	
+		void init(int device){
+			input.init(device);
+		}
+		
+		size_t get_smem_bytes(){
+			size_t result = 0;
+			return result;
+		}
+		
+		int log2size;
+		
+		mkt::DeviceArray<float> input;
+	};
+	struct Fetch_map_index_in_place_array_functor{
+		
+		Fetch_map_index_in_place_array_functor(const mkt::DArray<float>& _input) : input(_input){}
+		
+		~Fetch_map_index_in_place_array_functor() {}
+		
+		__device__
+		auto operator()(int i, float Ti){
+			return // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			input.get_data_local(std::pow((i), std::pow(2, (((log2size) - 1) - (counter)))))
+			;
+		}
+	
+		void init(int device){
+			input.init(device);
+		}
+		
+		size_t get_smem_bytes(){
+			size_t result = 0;
+			return result;
+		}
+		
+		int counter;
+		int log2size;
+		
+		mkt::DeviceArray<float> input;
+	};
 	struct Combine_map_index_in_place_array_functor{
 		
-		Combine_map_index_in_place_array_functor(){}
+		Combine_map_index_in_place_array_functor(const mkt::DArray<float>& _input_double) : input_double(_input_double){}
 		
 		~Combine_map_index_in_place_array_functor() {}
 		
 		__device__
-		auto operator()(int Ai, float T){
-			return (0.0f + );
+		auto operator()(int Index, float Ai){
+			float newa = 0.0f;
+			int b = ((Index) / std::pow(2, (((log2size) - 1) - (counter))));
+			int b2 = 0;
+			for(int l = 0; ((l) <= (counter)); l++){
+				
+				if(((b) == 1)){
+				b2 = ((2 * (b2)) + 1);
+				}
+				 else {
+						b2 = (2 * (b2));
+					}
+				b = ((b) / 2);
+			}
+			float temp = ((((2.0 * (pi)) / (Problemsize)) * (b2)) * std::pow(2, (((log2size) - 1) - (counter))));
+			
+			if(((Index) == std::pow(2, (((log2size) - 1) - (counter))))){
+			newa = (// TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+			input_double.get_data_local((Index))
+			 + ((temp) * (Ai)));
+			}
+			 else {
+					newa = ((Ai) + ((temp) * // TODO: ExpressionGenerator.generateCollectionElementRef: Array, global indices, distributed
+					input_double.get_data_local((Index))
+					));
+				}
+			return (newa);
 		}
 	
 		void init(int device){
+			input_double.init(device);
 		}
 		
 		size_t get_smem_bytes(){
@@ -116,9 +169,12 @@
 			return result;
 		}
 		
-		int j;
-		int i;
+		int counter;
+		int log2size;
+		double pi;
+		int Problemsize;
 		
+		mkt::DeviceArray<float> input_double;
 	};
 	
 	
@@ -127,54 +183,58 @@
 	
 	
 	
-int main(int argc, char** argv) {
-	mkt::init();
+	int main(int argc, char** argv) {
+		mkt::init();
 		
 		
-	mkt::sync_streams();
-	std::chrono::high_resolution_clock::time_point complete_timer_start = std::chrono::high_resolution_clock::now();
+		mkt::sync_streams();
+		std::chrono::high_resolution_clock::time_point complete_timer_start = std::chrono::high_resolution_clock::now();
 		
-	mkt::DArray<float> input(0, 268435952, 268435952, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
-	mkt::DArray<float> output(0, 268435952, 268435952, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
-	mkt::DArray<float> coeff(0, 1024, 1024, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+		mkt::DArray<float> input(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+		mkt::DArray<float> input_double(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
+		//mkt::DArray<complex> output(0, 16, 16, complex{}, 1, 0, 0, mkt::DIST, mkt::COPY);
+		mkt::DArray<float> coeff(0, 16, 16, 0.0f, 1, 0, 0, mkt::DIST, mkt::COPY);
 		
-	Init_map_in_place_array_functor init_map_in_place_array_functor{};
-	FIR_map_in_place_array_functor fIR_map_in_place_array_functor{};
-	Combine_map_index_in_place_array_functor combine_map_index_in_place_array_functor{};
+		Init_map_in_place_array_functor init_map_in_place_array_functor{};
+		Zero_fill_map_in_place_array_functor zero_fill_map_in_place_array_functor{};
+		Bitrev_reorder_map_index_in_place_array_functor bitrev_reorder_map_index_in_place_array_functor{input};
+		Fetch_map_index_in_place_array_functor fetch_map_index_in_place_array_functor{input};
+		Combine_map_index_in_place_array_functor combine_map_index_in_place_array_functor{input_double};
 		
-	int ntaps = 16;
-	int nchans = 64;
-	int nspectra = 2097152;
-	mkt::map_in_place<float, Init_map_in_place_array_functor>(input, init_map_in_place_array_functor);
-	mkt::map_in_place<float, Init_map_in_place_array_functor>(coeff, init_map_in_place_array_functor);
-	output = (input);
-	mkt::sync_streams();
-	std::chrono::high_resolution_clock::time_point timer_start = std::chrono::high_resolution_clock::now();
-// TODO Pass arguments! + threads are listed in functor? check that.
-//const int gpu_elements = a.get_size_gpu();
-		//		int threads = gpu_elements < 1024 ? gpu_elements : 1024; // nextPow2
-		//		int blocks = (gpu_elements + threads - 1) / threads;
-	mkt::map_in_place<float, FIR_map_in_place_array_functor>(input, fIR_map_in_place_array_functor);
-	int log2p = 6;
-	int log2size = 28;
-	float j = 0;
-	for(int i = 0; ((i) < (log2p)); i++){
-		combine_map_index_in_place_array_functor.j = (j);
-		combine_map_index_in_place_array_functor.i = (output);
-		mkt::map_index_in_place<float, Combine_map_index_in_place_array_functor>(input, combine_map_index_in_place_array_functor);
-	}
-	mkt::sync_streams();
-	std::chrono::high_resolution_clock::time_point timer_end = std::chrono::high_resolution_clock::now();
-	double seconds = std::chrono::duration<double>(timer_end - timer_start).count();
 		
-	mkt::sync_streams();
-	std::chrono::high_resolution_clock::time_point complete_timer_end = std::chrono::high_resolution_clock::now();
-	double complete_seconds = std::chrono::duration<double>(complete_timer_end - complete_timer_start).count();
-	printf("Complete execution time: %.5fs\n", complete_seconds);
+				
 		
-	printf("Execution time: %.5fs\n", seconds);
-	printf("Threads: %i\n", 0);
-	printf("Processes: %i\n", 1);
+		int ntaps = 16;
+		int nchans = 16;
+		int nspectra = 16;
+		mkt::map_in_place<float, Init_map_in_place_array_functor>(input, init_map_in_place_array_functor);
+		mkt::map_in_place<float, Init_map_in_place_array_functor>(coeff, init_map_in_place_array_functor);
+		mkt::map_in_place<float, Zero_fill_map_in_place_array_functor>(input_double, zero_fill_map_in_place_array_functor);
+		mkt::sync_streams();
+		std::chrono::high_resolution_clock::time_point timer_start = std::chrono::high_resolution_clock::now();
+		int log2size = 4;
+		bitrev_reorder_map_index_in_place_array_functor.log2size = (log2size);
+		mkt::map_index_in_place<float, Bitrev_reorder_map_index_in_place_array_functor>(input_double, bitrev_reorder_map_index_in_place_array_functor);
+		for(int i = 0; ((i) < 1); i++){
+			for(int j = 0; ((j) < (log2size)); j++){
+				fetch_map_index_in_place_array_functor.counter = (j);fetch_map_index_in_place_array_functor.log2size = (log2size);
+				mkt::map_index_in_place<float, Fetch_map_index_in_place_array_functor>(input_double, fetch_map_index_in_place_array_functor);
+				combine_map_index_in_place_array_functor.counter = (j);combine_map_index_in_place_array_functor.log2size = (log2size);combine_map_index_in_place_array_functor.pi = (PI);combine_map_index_in_place_array_functor.Problemsize = 16;
+				mkt::map_index_in_place<float, Combine_map_index_in_place_array_functor>(input, combine_map_index_in_place_array_functor);
+			}
+		}
+		mkt::sync_streams();
+		std::chrono::high_resolution_clock::time_point timer_end = std::chrono::high_resolution_clock::now();
+		double seconds = std::chrono::duration<double>(timer_end - timer_start).count();
 		
-	return EXIT_SUCCESS;
-}
+		mkt::sync_streams();
+		std::chrono::high_resolution_clock::time_point complete_timer_end = std::chrono::high_resolution_clock::now();
+		double complete_seconds = std::chrono::duration<double>(complete_timer_end - complete_timer_start).count();
+		printf("Complete execution time: %.5fs\n", complete_seconds);
+		
+		printf("Execution time: %.5fs\n", seconds);
+		printf("Threads: %i\n", 0);
+		printf("Processes: %i\n", 1);
+		
+		return EXIT_SUCCESS;
+		}

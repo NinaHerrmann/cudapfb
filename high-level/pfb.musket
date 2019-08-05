@@ -10,14 +10,18 @@ struct complex {
 	float y;
 };
 
-array<float,32768,dist> input;
-array<float,32768,dist> input_double;
-array<complex,32768,dist> output;
-array<float,1024,dist> coeff;
+array<float,16,dist> input;
+array<float,16,dist> input_double;
+array<complex,16,dist> output;
+array<float,16,dist> coeff;
 
 
-float init(float x){
+float init(int x){
 	return (float) mkt::rand(0.0f,1.0f);
+}
+
+float zero_fill(int x){
+	return (float) 0;
 }
 
 float FIR(int taps, int channels, int spectra, int Index, float a) {
@@ -30,17 +34,9 @@ float FIR(int taps, int channels, int spectra, int Index, float a) {
 	return newa;
 }
 
-float selectinput(float y) {
-	return (float) 0.0f;
-}
-
-float selectcoeff(float y) {
-	return (float) 0.0f;
-}
-
 float combine(int counter, int log2size, double pi, int Problemsize, int Index, float Ai) {
 // TOBE --> (i & (1<<log2size-1-j)) ? T.get(i) + omega(j,i) * Ai : Ai + omega(j,i) * T.get(i);} 
-	float new = 0.0f;
+	float newa = 0.0f;
 	// Ex Omega function
 	// (i & (1<<log2size-1-j))
 	int b = Index / (std::pow(2, log2size-1-counter));   
@@ -58,41 +54,45 @@ float combine(int counter, int log2size, double pi, int Problemsize, int Index, 
 	// intermediateresult.x = cos(temp);
 	// intermediateresult.y = sin(temp);
 	if (Index == (std::pow(2, log2size-1-counter))) {
-		new = input_double[Index] + temp * Ai;
+		newa = input_double[Index] + temp * Ai;
 	}
 	else {
-		new = Ai + temp * input_double[Index];
+		newa = Ai + temp * input_double[Index];
 	}
-	return new;
+	return newa;
 }
 
 float fetch(int counter, int log2size, int i, float Ti){
   return input[std::pow(i,std::pow(2, log2size-1-counter))];
 }
 
+float bitrev_reorder(int log2size, int x, int i){
+// brev muss verändert werden.(Bit reverse order)
+	int brev = 0;
+	int __powf = 0;
+	return input[x / std::pow2(2,32 - log2size)];
+}
+
 main{
 	int ntaps = 16;
-	int nchans = 64;
-	int nspectra = 512;
+	int nchans = 16;
+	int nspectra = 16;
 	input.mapInPlace(init());
 	coeff.mapInPlace(init());
-	input_double = input;
+	input_double.mapInPlace(zero_fill());
 	mkt::roi_start();
 	// TODO FIR Filter
-	input.mapIndexInPlace(FIR(ntaps, nchans, nspectra));
+	// input.mapIndexInPlace(FIR(ntaps, nchans, nspectra));
 	
-	int log2p = 6;
-    int log2size  = 28; 
+    int log2size = 4; 
+    input_double.mapIndexInPlace(bitrev_reorder(log2size));
+	//input_double = input.mapIndex();
+	for(int i = 0; i < 1; i++){
+    	for (int j=0; j<log2size; j++) {
+		    input_double.mapIndexInPlace(fetch(j, log2size));
+		    input.mapIndexInPlace(combine(j, log2size, PI, 16)); 
+	    }
+	}
 
-	for(int i = 0; i < log2p; i++){
-    	input_double = input;
-    	// T.permutePartition(curry(bitcomplement)(log2p-1-i));
-		input.mapIndexInPlace(combine(i, log2size, PI, 32768));
-	}
-	for (int j=log2p; j<log2size; j++){
-      input_double.mapIndexInPlace(fetch(j, log2size));
-      input.mapIndexInPlace(combine(j, log2size, PI, 32768));
-	}
-	
     mkt::roi_end();
 }
