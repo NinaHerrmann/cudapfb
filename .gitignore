@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+low-level/PFB_radioastronomie/x64/Debug/*
+low-level/PFB_radioastronomie/.vs/*
+low-level/PFB_radioastronomie/x64/*
+low-level/PFB_radioastronomie/PFB_radioastronomie/x64/*
+low-level/PFB_radioastronomie/CPFB-Test/x64/*
+high-level/ref_impl/testFFT/.vs/*
