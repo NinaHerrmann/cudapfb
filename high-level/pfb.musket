@@ -10,12 +10,11 @@ struct float2{
 	float y;
 };
 
-array<float,16,dist> input;
-array<float,16,dist> input_double;
-array<float2,16,dist> c_input_double;
-array<float2,16,dist> c_output;
-array<float,16,dist> coeff;
-
+array<float,1216,dist> input;
+array<float,1024,dist> input_double;
+array<float2,1024,dist> c_input_double;
+array<float2,1024,dist> c_output;
+array<float,512,dist> coeff;
 
 float init(int x){
 	return (float) 1;
@@ -27,19 +26,16 @@ float zero_fill(int x){
 
 float FIR(int taps, int channels, int spectra, int Index, float a) {
 	float newa = 0;
- 	if (Index <= (channels * spectra)) {
- 		for (int j = 0; j < taps; j++) {
-			newa += input[Index+(j*channels)] * coeff[Index+(j*channels)];
-		}
+	for (int j = 0; j < taps; j++) {
+		newa += input[Index+(j*channels)] * coeff[Index+(j*channels)];
 	}
 	return newa;
 }
 
 float2 float_to_float2(int x, float2 y) {
-	float2 returnvalue;
-	returnvalue.x = (float) input_double[x];
-	returnvalue.y = 0.0f;
-	return returnvalue;
+	y.x = (float) input_double[x];
+	y.y = 0.0f;
+	return y;
 }
 
 float2 combine(int counter, int log2size, double pi, int Problemsize, int Index, float2 Ai) {
@@ -82,30 +78,23 @@ float2 fetch(int counter, int log2size, int i, float2 Ti){
   return c_output[8787 * std::pow(2, log2size-1-counter)];
 }
 
-float2 bitrev_reorder(int log2size, int x, float2 i){
-	return c_input_double[4242 / std::pow(2,32 - log2size)];
-}
-
 main{
-	int ntaps = 16;
-	int nchans = 16;
+	int ntaps = 4;
+	int nchans = 64;
 	int nspectra = 16;
+	int log2size = 6; 
 	input.mapInPlace(init());
 	coeff.mapInPlace(init());
-	input_double.mapInPlace(zero_fill());
+	
 	mkt::roi_start();
-	// TODO FIR Filter
-	input.mapIndexInPlace(FIR(ntaps, nchans, nspectra));
+	input_double.mapIndexInPlace(FIR(ntaps, nchans, nspectra));
+	
 	// Convert the floatnumbers into float2 values.
-	c_input_double.mapIndexInPlace(float_to_float2());
-    int log2size = 4; 
-    c_output.mapIndexInPlace(bitrev_reorder(log2size));
-	for(int i = 0; i < 1; i++){
-    	for (int j=0; j<log2size; j++) {
-		    c_input_double.mapIndexInPlace(fetch(j, log2size));
-		    c_output.mapIndexInPlace(combine(j, log2size, PI, 16)); 
-	    }
-	}
+	c_output.mapIndexInPlace(float_to_float2());
 
+	for (int j=0; j<log2size; j++) {
+	    c_input_double.mapIndexInPlace(fetch(j, log2size));
+	    c_output.mapIndexInPlace(combine(j, log2size, PI, 16)); 
+    }
     mkt::roi_end();
 }
